@@ -1,0 +1,10 @@
+.photo-std-size {
+	width: 200px;
+	height: 200px;
+}
+.round-img {
+	border-radius: 50%;
+}
+.make-inline .mi1 .mi2 {
+	display: inline;
+}
