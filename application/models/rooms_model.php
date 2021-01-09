@@ -38,7 +38,8 @@ class rooms_model extends CI_Model
 			'descs' => $this->input->post('descs'),
 			'locations' => $this->input->post('locations'),
 			'capacity' => $this->input->post('capacity'),
-			'updatedby' => date('Y-m-d H:i:s')
+			'dateupdated' => date('Y-m-d H:i:s'),
+			'updatedby' => 1
 		);
 		$sysid = $this->input->post('sysid');
 		$this->db->where('sysid', $sysid);

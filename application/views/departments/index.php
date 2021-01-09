@@ -1,15 +1,14 @@
 <h2><?= $title ?></h2>
 <button class="btn btn-primary" data-toggle="add_new_modal" id="add_new_modal_btn">Add new</button>
 <hr>
-
-<table class="display" id="roomList" style="width: 100%"></table>
+<table class="display" id="departmentsList" style="width: 100%"></table>
 
 <!-- Modal -->
 <div class="modal fade" role="dialog" id="add_new_modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="modal_header_title">Modal Data Entry | New Class Room</h5>
+				<h5 id="modal_header_title">Modal Data Entry | New Department</h5>
 			</div>
 			<div class="modal-body">
 				<form id="entry_form">
@@ -20,15 +19,7 @@
 					</div>
 					<div class="form-group">
 						<label>Description</label>
-						<input type="text" name="descs" id="descs" class="form-control" placeholder="Description">
-					</div>
-					<div class="form-group">
-						<label>Location</label>
-						<input type="text" name="locations" id="locations" class="form-control" placeholder="Locations">
-					</div>
-					<div class="form-group">
-						<label>Capacity</label>
-						<input type="text" name="capacity" id="capacity" class="form-control" placeholder="Capacity">
+						<input type="text" name="descriptions" id="descriptions" class="form-control" placeholder="Description">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-warning close" data-dismiss="modal">Cancel</button>
@@ -47,44 +38,32 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		loadRooms();
+		loadDepartments();
 
 		// Loads data into the table
-		function loadRooms() {
+		function loadDepartments() {
 
-			$("#roomList").DataTable({
+			$("#departmentsList").DataTable({
 				"pageLength": 10,
 				"processing": true,
 				"ajax": {
-					url: 'rooms/find_all',
+					url: 'departments/get_departments',
 					dataSrc: ''
 				},
 				"columns":[
-				// {
-				// 	"title": 'SYSID',
-				// 	'data': 'sysid'
-				// },
 				{
 					"title": 'Code',
 					"data": 'code'	
 				},
 				{
 					"title": 'Description',
-					"data": 'descs'
-				},
-				{
-					"title": 'Locations',
-					"data": 'locations'
-				},
-				{
-					"title": 'Capacity',
-					"data": 'capacity'
+					"data": 'descriptions'
 				},
 				{
 					"title": "Control",
 					"data": 'sysid',
 					"render": function(data) {
-						return "<button class='row_update btn btn-sm btn-default' href='' sysid='"+data+"'>Update</button> | <button class='row_block btn btn-sm btn-default' sysid='"+data+"'>Block</button> | <button class='row_delete btn btn-sm btn-default' sysid='"+data+"'>Delete</button>";
+						return "<button class='row_update btn btn-sm btn-default' href='' sysid='"+data+"'>Update</button> | <button class='row_delete btn btn-sm btn-default' sysid='"+data+"'>Delete</button>";
 					}
 				}
 				]
@@ -93,7 +72,7 @@
 		}
 
 		function refresh() {
-			var table = $('#roomList').DataTable( {
+			var table = $('#departmentsList').DataTable( {
 				ajax: "data.json"
 			} );
 			table.ajax.reload();
@@ -103,7 +82,7 @@
 			$("#add_new_modal").modal("show");
 			$("#submit").text("Save");
 			$("#entry_form")[0].reset();
-			$("#modal_header_title").text("Modal Data Entry | New Class Room");
+			$("#modal_header_title").text("Modal Data Entry | New Department");
 		});
 
 		$("#entry_form").on("submit", function(e){
@@ -118,7 +97,7 @@
 
 		function add(form) {
 			$.ajax({
-				'url':'rooms/add_room',
+				'url':'departments/add',
 				'type':'post',
 				'data': new FormData(form),
 				contentType: false,
@@ -126,14 +105,14 @@
 				success: function(data) {
 					alert(data);
 					$("#add_new_modal").modal("hide");
-					$("#roomList").DataTable().ajax.reload(null, false);
+					$("#departmentsList").DataTable().ajax.reload(null, false);
 				}
 			});
 		}
 
 		function update(form) {
 			$.ajax({
-				'url': 'rooms/update_room',
+				'url': 'departments/update',
 				'type': 'post',
 				'data': new FormData(form),
 				contentType: false,
@@ -141,7 +120,7 @@
 				success: function(data) {
 					alert(data);
 					$("#add_new_modal").modal("hide");
-					$("#roomList").DataTable().ajax.reload(null, false);
+					$("#departmentsList").DataTable().ajax.reload(null, false);
 				}
 			});
 		}
@@ -153,23 +132,21 @@
 			$("#sysid").val(sysid);
 
 			$("#submit").text("Update");
-			$("#modal_header_title").text("Modal Data Entry | Update Class Room");
+			$("#modal_header_title").text("Modal Data Entry | Update Department");
 
-			queryRoom(sysid);
+			queryDepartment(sysid);
 		});	
 
-		function queryRoom(sysid) {
+		function queryDepartment(sysid) {
 			$.ajax({
-				'url': 'rooms/get_room',
+				'url': 'departments/get_department',
 				'type': 'post',
 				'data':{'sysid':sysid},
 				success:function(data) {
-					var room = JSON.parse(data)[0]
-					$("#sysid").val(room['sysid']);
-					$("#code").val(room['code']);
-					$("#descs").val(room['descs']);
-					$("#locations").val(room['locations']);
-					$("#capacity").val(room['capacity']);
+					var deparment = JSON.parse(data)[0]
+					$("#sysid").val(deparment['sysid']);
+					$("#code").val(deparment['code']);
+					$("#descriptions").val(deparment['descriptions']);
 				}
 			})
 		}
@@ -178,23 +155,11 @@
 			var sysid = $(this).attr('sysid');
 			$.ajax({
 				'method': 'POST',
-				'url': 'rooms/delete_room',
+				'url': 'departments/delete',
 				'data': {sysid:sysid},
 				success:function(data) {
 					alert(data);
-					$("#roomList").DataTable().ajax.reload(null, false);
-				}
-			});
-		});
-
-		$(document).on("click", ".row_block", function(){
-			var sysid = $(this).attr('sysid');
-			$.ajax({
-				'method': 'POST',
-				'url': 'rooms/block_room',
-				'data': {sysid:sysid},
-				success:function(data) {
-					alert(data);
+					$("#departmentsList").DataTable().ajax.reload(null, false);
 				}
 			});
 		});

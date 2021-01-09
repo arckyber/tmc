@@ -9,7 +9,10 @@ class Rooms extends CI_Controller
 	public function index() {
 		$data['title'] = 'Class room list';
 		$data['rooms'] = $this->rooms_model->get_rooms();
+		$this->load->view('templates/header');
+		$this->load->view('templates/nav');
 		$this->load->view('rooms/index', $data);
+		$this->load->view('templates/footer');
 	}
 
 	public function get_room() {
