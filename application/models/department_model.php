@@ -9,13 +9,14 @@ class department_model extends CI_Model
 	public function get_department() {
 		$sysid = $this->input->post('sysid');
 		$this->db->where('sysid', $sysid);
-		return $this->db->get('department_main')->result();
+		$this->db->where('status', 1);
+		return $this->db->get('departments_main')->result();
 	}
 	
 	public function get_departments() {
 		$this->db->order_by('code', 'ASC');
 		$this->db->where('status', 1);
-		$query = $this->db->get('department_main');
+		$query = $this->db->get('departments_main');
 		return $query->result();
 	}
 
@@ -27,7 +28,7 @@ class department_model extends CI_Model
 			'updatedby' => '12', //This is just an example
 			'status' => 1
 		);
-		return $this->db->insert('department_main', $data);
+		return $this->db->insert('departments_main', $data);
 	}
 
 	public function update() {
@@ -39,13 +40,13 @@ class department_model extends CI_Model
 		);
 		$sysid = $this->input->post('sysid');
 		$this->db->where('sysid', $sysid);
-		return $this->db->update('department_main', $data);
+		return $this->db->update('departments_main', $data);
 	}
 
 	public function delete() {
 		$sysid = $this->input->post('sysid');
 		$this->db->where('sysid', $sysid);
-		return $this->db->update('department_main', ['status' => 0]);
+		return $this->db->update('departments_main', ['status' => 0]);
 	}
 }
 

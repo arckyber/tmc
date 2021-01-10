@@ -35,7 +35,7 @@ class Rooms extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			echo "Incomplete data";
-			return false;
+			return FALSE;
 		}
 
 		if ($this->rooms_model->add_room()) {
@@ -55,7 +55,7 @@ class Rooms extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			echo "Incomplete data";
-			return false;
+			return FALSE;
 		}
 
 		if ($this->rooms_model->update_room()) {

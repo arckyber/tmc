@@ -25,7 +25,7 @@ class Departments extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			echo "Incomplete data";
-			return false;
+			return FALSE;
 		}
 
 		if ($this->department_model->add()) {
@@ -43,7 +43,7 @@ class Departments extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			echo "Incomplete data";
-			return false;
+			return FALSE;
 		}
 
 		if ($this->department_model->update()) {

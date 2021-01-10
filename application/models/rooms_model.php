@@ -16,6 +16,7 @@ class rooms_model extends CI_Model
 	public function get_room() {
 		$sysid = $this->input->post('sysid');
 		$this->db->where('sysid', $sysid);
+		$this->db->where('status', 1);
 		return $this->db->get('rooms')->result();
 	}
 
